@@ -27,18 +27,17 @@ class PluginCamerainputMigration
 {
 	private const BASE_VERSION = '1.0.0';
 
-	/** @var Migration */
+	/** @var \Glpi\Migration\Migration */
 	protected $glpiMigration;
 
-	/** @var DBmysql */
+	/** @var \Glpi\DB\DB */
 	protected $db;
 
 
 	public function __construct(string $version)
 	{
 		global $DB;
-      /** @phpstan-ignore-next-line Error exists in core, not plugin */
-		$this->glpiMigration = new Migration($version);
+		$this->glpiMigration = new \Glpi\Migration\Migration($version);
 		$this->db = $DB;
 	}
 
@@ -65,7 +64,7 @@ class PluginCamerainputMigration
 
 		   // Get last known recorded version. If none exists, assume this is 1.0.0 (start migration from beginning).
 		   // Migrations should be replayable so nothing should be lost on multiple runs.
-		   $lastKnownVersion = Config::getConfigurationValues('plugin:camerainput')['plugin_version'] ?? self::BASE_VERSION;
+		   $lastKnownVersion = \Glpi\Config::getConfigurationValues('plugin:camerainput')['plugin_version'] ?? self::BASE_VERSION;
 
 		   // Call each migration in order starting from the last known version
 		   foreach ($versionMap as $version => $func) {
@@ -85,7 +84,7 @@ class PluginCamerainputMigration
 
 	private function setPluginVersionInDB(string $version): void
 	{
-		$this->db->updateOrInsert(Config::getTable(), [
+		$this->db->updateOrInsert(\Glpi\Config::getTable(), [
 		   'value'     => $version,
 		   'context'   => 'plugin:camerainput',
 		   'name'      => 'plugin_version'

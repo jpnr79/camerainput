@@ -227,6 +227,6 @@ class CameraInput {
    }
 }
 
-$(document).on('ready', () => {
+$(function() {
    window.GlpiPluginCameraInput = new CameraInput();
 });

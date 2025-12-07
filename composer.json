@@ -11,6 +11,11 @@
   "require-dev": {
     "glpi-project/tools": "dev-debug/master"
   },
+  "autoload": {
+    "classmap": [
+      "inc/"
+    ]
+  },
   "config": {
     "optimize-autoloader": true,
     "platform": {
