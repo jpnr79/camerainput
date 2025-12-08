@@ -20,7 +20,11 @@
  *  --------------------------------------------------------------------------
  */
 
+if (!defined('GLPI_ROOT')) {
+    define('GLPI_ROOT', dirname(dirname(dirname(__DIR__))));
+}
 require_once GLPI_ROOT . '/src/Core/Config.php';
+use Glpi\Core\Config;
 
 /**
  * Handles migrating between plugin versions
@@ -62,7 +66,7 @@ class PluginCamerainputMigration
 
 		   // Get last known recorded version. If none exists, assume this is 1.0.0 (start migration from beginning).
 		   // Migrations should be replayable so nothing should be lost on multiple runs.
-		   $lastKnownVersion = \Glpi\Core\Config::getConfigurationValues('plugin:camerainput')['plugin_version'] ?? self::BASE_VERSION;
+		   $lastKnownVersion = Config::getConfigurationValues('plugin:camerainput')['plugin_version'] ?? self::BASE_VERSION;
 
 		   // Call each migration in order starting from the last known version
 		   foreach ($versionMap as $version => $func) {
@@ -81,7 +85,7 @@ class PluginCamerainputMigration
 
 	private function setPluginVersionInDB(string $version): void
 	{
-		$this->db->updateOrInsert(\Glpi\Core\Config::getTable(), [
+		$this->db->updateOrInsert(Config::getTable(), [
 		   'value'     => $version,
 		   'context'   => 'plugin:camerainput',
 		   'name'      => 'plugin_version'
