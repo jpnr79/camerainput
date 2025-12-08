@@ -58,7 +58,7 @@
         <version>
             <num>2.2.0</num>
             <compatibility>~11.0.0</compatibility>
-            <download_url></download_url>
+            <download_url>https://github.com/cconard96/glpi-camerainput-plugin/releases/download/v2.2.0/glpi-camerainput-plugin-2.2.0.tar.bz2</download_url>
         </version>
     </versions>
     <langs>

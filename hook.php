@@ -22,7 +22,7 @@
 
 function plugin_camerainput_install()
 {
-	$migration = new PluginCamerainputMigration(PLUGIN_CAMERAINPUT_VERSION);
+	$migration = new PluginCamerainputMigration();
 	$migration->applyMigrations();
 	return true;
 }
@@ -31,4 +31,3 @@ function plugin_camerainput_uninstall()
 {
 	return true;
 }
-
