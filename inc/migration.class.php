@@ -20,63 +20,52 @@
  *  --------------------------------------------------------------------------
  */
 
-if (!defined('GLPI_ROOT')) {
-    define('GLPI_ROOT', dirname(dirname(dirname(__DIR__))));
-}
-require_once GLPI_ROOT . '/src/Core/Config.php';
-use Glpi\Core\Config;
-
 /**
  * Handles migrating between plugin versions
  */
 class PluginCamerainputMigration
 {
-	private const BASE_VERSION = '1.0.0';
+	private const BASE_VERSION = '2.0.0';
 
 	/** @var \Glpi\DB\DB */
 	protected $db;
 
 
-	public function __construct(string $version = '')
+	public function __construct()
 	{
 		global $DB;
-		$this->db            = $DB;
+		$this->db = $DB;
 	}
 
 
 	public function applyMigrations(): void
 	{
 		$rc = new ReflectionClass($this);
-		$otherMigrationFunctions = array_map(static function ($rm) {
+		$migration_functions = array_map(static function ($rm) {
 		   return $rm->getShortName();
 		}, array_filter($rc->getMethods(), static function ($m) {
 		   return preg_match('/^apply_.*_migration$/', $m->getShortName());
 		}));
 
-		if (count($otherMigrationFunctions)) {
+		if (count($migration_functions)) {
 		   // Map versions to functions
-		   $versionMap = [];
-		   foreach ($otherMigrationFunctions as $function) {
+		   $version_map = [];
+		   foreach ($migration_functions as $function) {
 		      $ver = str_replace(['apply_', '_migration', '_'], ['', '', '.'], $function);
-		      $versionMap[$ver] = $function;
+		      $version_map[$ver] = $function;
 		   }
 
 		   // Sort semantically
-		   uksort($versionMap, 'version_compare');
+		   uksort($version_map, 'version_compare');
 
-		   // Get last known recorded version. If none exists, assume this is 1.0.0 (start migration from beginning).
-		   // Migrations should be replayable so nothing should be lost on multiple runs.
-		   $lastKnownVersion = Config::getConfigurationValues('plugin:camerainput')['plugin_version'] ?? self::BASE_VERSION;
+		   $last_known_version = \Glpi\Core\Config::getConfigurationValues('plugin:camerainput')['version'] ?? self::BASE_VERSION;
 
 		   // Call each migration in order starting from the last known version
-		   foreach ($versionMap as $version => $func) {
-		      // Last known version is the same or greater than release version
-		      if (version_compare($lastKnownVersion, $version, '<=')) {
+		   foreach ($version_map as $version => $func) {
+		      if (version_compare($last_known_version, $version, '<')) {
 		         \Glpi\Toolbox\PluginMigration::execute($this, $func);
-		         if ($version !== self::BASE_VERSION) {
-		            $this->setPluginVersionInDB($version);
-		            $lastKnownVersion = $version;
-		         }
+                 $this->setPluginVersionInDB($version);
+                 $last_known_version = $version;
 		      }
 		   }
 		}
@@ -85,21 +74,11 @@ class PluginCamerainputMigration
 
 	private function setPluginVersionInDB(string $version): void
 	{
-		$this->db->updateOrInsert(Config::getTable(), [
+		$this->db->updateOrInsert(\Glpi\Core\Config::getTable(), [
 		   'value'     => $version,
-		   'context'   => 'plugin:camerainput',
-		   'name'      => 'plugin_version'
 		], [
 		   'context'   => 'plugin:camerainput',
-		   'name'      => 'plugin_version'
+		   'name'      => 'version'
 		]);
-	}
-
-
-	/**
-	 * Apply the migrations for the base plugin version (1.0.0).
-	 */
-	private function apply_1_0_0_migration(): void
-	{
 	}
 }

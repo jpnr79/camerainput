@@ -22,6 +22,7 @@
 
 function plugin_camerainput_install()
 {
+	include_once __DIR__ . '/inc/migration.class.php';
 	$migration = new PluginCamerainputMigration();
 	$migration->applyMigrations();
 	return true;
