@@ -47,8 +47,8 @@ function plugin_version_camerainput()
 	   'homepage'     =>'https://github.com/cconard96/glpi-camerainput-plugin',
 	   'requirements' => [
 	      'glpi'   => [
-	         'min' => PLUGIN_CAMERAINPUT_MIN_GLPI,
-	         'max' => PLUGIN_CAMERAINPUT_MAX_GLPI
+	         'min' => '11.0',
+	         'max' => '12.0'
 	      ]
 	   ]
 	];
