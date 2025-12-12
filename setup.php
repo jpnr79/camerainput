@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 /*
  -------------------------------------------------------------------------
  Camera Input
@@ -24,32 +25,44 @@ define('PLUGIN_CAMERAINPUT_VERSION', '2.2.0');
 define('PLUGIN_CAMERAINPUT_MIN_GLPI', '11.0.0');
 define('PLUGIN_CAMERAINPUT_MAX_GLPI', '11.1.0');
 
-function plugin_init_camerainput()
+
+/**
+ * Initialize the Camera Input plugin
+ *
+ * @return void
+ */
+function plugin_init_camerainput(): void
 {
 	global $PLUGIN_HOOKS;
 	$PLUGIN_HOOKS['csrf_compliant']['camerainput'] = true;
 
 	if (Plugin::isPluginActive('camerainput')) {
-      $PLUGIN_HOOKS['add_javascript']['camerainput'][] = 'public/lib/zbar-wasm/index.js';
-      $PLUGIN_HOOKS['add_javascript']['camerainput'][] = 'public/lib/barcode-detector-polyfill/index.js';
-      $PLUGIN_HOOKS['add_javascript']['camerainput'][] = 'js/camerainput.js';
-      $PLUGIN_HOOKS['add_css']['camerainput'][] = 'css/camerainput.css';
-   }
+		$PLUGIN_HOOKS['add_javascript']['camerainput'][] = 'public/lib/zbar-wasm/index.js';
+		$PLUGIN_HOOKS['add_javascript']['camerainput'][] = 'public/lib/barcode-detector-polyfill/index.js';
+		$PLUGIN_HOOKS['add_javascript']['camerainput'][] = 'js/camerainput.js';
+		$PLUGIN_HOOKS['add_css']['camerainput'][] = 'css/camerainput.css';
+	}
 }
 
-function plugin_version_camerainput()
+
+/**
+ * Get the version information for the Camera Input plugin
+ *
+ * @return array
+ */
+function plugin_version_camerainput(): array
 {
-	return [
-	   'name'         => __('Camera Input', 'camerainput'),
-	   'version'      => PLUGIN_CAMERAINPUT_VERSION,
-	   'author'       => 'Curtis Conard',
-	   'license'      => 'GPLv2',
-	   'homepage'     =>'https://github.com/cconard96/glpi-camerainput-plugin',
-	   'requirements' => [
-	      'glpi'   => [
-	         'min' => '11.0',
-	         'max' => '12.0'
-	      ]
-	   ]
-	];
+    return [
+        'name'         => __('Camera Input', 'camerainput'),
+        'version'      => PLUGIN_CAMERAINPUT_VERSION,
+        'author'       => 'Curtis Conard',
+        'license'      => 'GPLv2',
+        'homepage'     => 'https://github.com/cconard96/glpi-camerainput-plugin',
+        'requirements' => [
+            'glpi'   => [
+                'min' => '11.0',
+                'max' => '12.0'
+            ]
+        ]
+    ];
 }

@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 /*
  -------------------------------------------------------------------------
  Camera Input
@@ -20,15 +21,26 @@
  --------------------------------------------------------------------------
 */
 
-function plugin_camerainput_install()
+
+/**
+ * Install the Camera Input plugin
+ *
+ * @return bool
+ */
+function plugin_camerainput_install(): bool
 {
-	include_once __DIR__ . '/inc/migration.class.php';
-	$migration = new PluginCamerainputMigration();
-	$migration->applyMigrations();
-	return true;
+    include_once __DIR__ . '/inc/migration.class.php';
+    $migration = new PluginCamerainputMigration();
+    $migration->applyMigrations();
+    return true;
 }
 
-function plugin_camerainput_uninstall()
+/**
+ * Uninstall the Camera Input plugin
+ *
+ * @return bool
+ */
+function plugin_camerainput_uninstall(): bool
 {
-	return true;
+    return true;
 }

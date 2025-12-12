@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 /**
  * -------------------------------------------------------------------------
  *  Camera Input
@@ -38,36 +39,40 @@ class PluginCamerainputMigration
 	}
 
 
+	/**
+	 * Apply all migrations in order
+	 * @return void
+	 */
 	public function applyMigrations(): void
 	{
-		$rc = new ReflectionClass($this);
+		$rc = new \ReflectionClass($this);
 		$migration_functions = array_map(static function ($rm) {
-		   return $rm->getShortName();
+			return $rm->getShortName();
 		}, array_filter($rc->getMethods(), static function ($m) {
-		   return preg_match('/^apply_.*_migration$/', $m->getShortName());
+			return preg_match('/^apply_.*_migration$/', $m->getShortName());
 		}));
 
 		if (count($migration_functions)) {
-		   // Map versions to functions
-		   $version_map = [];
-		   foreach ($migration_functions as $function) {
-		      $ver = str_replace(['apply_', '_migration', '_'], ['', '', '.'], $function);
-		      $version_map[$ver] = $function;
-		   }
+			// Map versions to functions
+			$version_map = [];
+			foreach ($migration_functions as $function) {
+				$ver = str_replace(['apply_', '_migration', '_'], ['', '', '.'], $function);
+				$version_map[$ver] = $function;
+			}
 
-		   // Sort semantically
-		   uksort($version_map, 'version_compare');
+			// Sort semantically
+			uksort($version_map, 'version_compare');
 
-		   $last_known_version = \Glpi\Core\Config::getConfigurationValues('plugin:camerainput')['version'] ?? self::BASE_VERSION;
+			$last_known_version = \Glpi\Core\Config::getConfigurationValues('plugin:camerainput')['version'] ?? self::BASE_VERSION;
 
-		   // Call each migration in order starting from the last known version
-		   foreach ($version_map as $version => $func) {
-		      if (version_compare($last_known_version, $version, '<')) {
-		         \Glpi\Toolbox\PluginMigration::execute($this, $func);
-                 $this->setPluginVersionInDB($version);
-                 $last_known_version = $version;
-		      }
-		   }
+			// Call each migration in order starting from the last known version
+			foreach ($version_map as $version => $func) {
+				if (version_compare($last_known_version, $version, '<')) {
+					\Glpi\Toolbox\PluginMigration::execute($this, $func);
+					$this->setPluginVersionInDB($version);
+					$last_known_version = $version;
+				}
+			}
 		}
 	}
 
