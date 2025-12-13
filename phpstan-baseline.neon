@@ -1,0 +1,19 @@
+parameters:
+	ignoreErrors:
+		-
+			message: '#^Call to static method execute\(\) on an unknown class Glpi\\Toolbox\\PluginMigration\.$#'
+			identifier: class.notFound
+			count: 1
+			path: inc/migration.class.php
+
+		-
+			message: '#^Call to static method getConfigurationValues\(\) on an unknown class Glpi\\Core\\Config\.$#'
+			identifier: class.notFound
+			count: 1
+			path: inc/migration.class.php
+
+		-
+			message: '#^Call to static method getTable\(\) on an unknown class Glpi\\Core\\Config\.$#'
+			identifier: class.notFound
+			count: 1
+			path: inc/migration.class.php
