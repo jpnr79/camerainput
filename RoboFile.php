@@ -6,7 +6,7 @@ require_once 'vendor/autoload.php';
 /**
  * RoboFile for Camera Input plugin
  */
-class RoboFile extends Glpi\Tools\RoboFile
+class RoboFile
 {
 	// Add tasks or overrides as needed for plugin development
 }
