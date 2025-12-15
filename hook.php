@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 /*
  -------------------------------------------------------------------------
@@ -8,7 +9,9 @@ declare(strict_types=1);
  -------------------------------------------------------------------------
  LICENSE
  This file is part of Camera Input.
- Camera Input is free software; you can redistribute it and/or modify
+ Camera Input is free software;
+if (!defined('GLPI_ROOT')) { define('GLPI_ROOT', realpath(__DIR__ . '/../..')); }
+ you can redistribute it and/or modify
  it under the terms of the GNU General Public License as published by
  the Free Software Foundation; either version 2 of the License, or
  (at your option) any later version.
