@@ -189,7 +189,7 @@ class CameraInput {
                current_criteria_input.parent().addClass('d-flex');
                class_obj.injectCameraInputButton(current_criteria_input, undefined, false);
             } catch (e) {
-               console.log(e);
+               console.error('[camerainput/js/camerainput.js] Error in display_criteria handler:', e);
             }
          }
 
@@ -200,7 +200,7 @@ class CameraInput {
                current_criteria_input.parent().addClass('d-flex');
                class_obj.injectCameraInputButton(current_criteria_input, undefined, false);
             } catch (e) {
-               console.log(e);
+               console.error('[camerainput/js/camerainput.js] Error in display_searchoption_value handler:', e);
             }
          }
       });
